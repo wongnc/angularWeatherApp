@@ -44,17 +44,19 @@ weatherApp.controller('homeController', ['$scope', 'cityService', function($scop
 	//watch to see when city changes
 	$scope.$watch('city', function(){
 		cityService.city = $scope.city;
-	})
+	}, true)
 	
 }]);
 
-weatherApp.controller('forecastController', ['$scope', '$resource', '$routeParams', 'cityService', function($scope, $resource, $routeParams, cityService){
-	
-	$scope.city = cityService.city;
-	
-	$scope.days = $routeParams.days || 2;
-	
-	$scope.weatherAPI = $resource("https://api.openweathermap.org/data/2.5/forecast/weather?q=sanfrancisco,us&APPID=370a271ac522911d56217344a090d0b2", {callback: "JSON_CALLBACK" }, { get: { method: "jsonp" }});
+ weatherApp.controller('forecastController', ['$scope', '$resource', '$routeParams', 'cityService', '$http', function($scope, $resource, $routeParams, cityService,$http){
+    
+    $scope.city = cityService.city;
+    
+    $scope.days = $routeParams.days || 2;
+    
+    $http.get("http://api.openweathermap.org/data/2.5/weather?id=5391997&APPID=370a271ac522911d56217344a090d0b2").then(function(res){
+         console.log(res);
+	});
 	
 	$scope.weatherResult = $scope.weatherAPI.get({ q: $scope.city, cnt:$scope.days });
 	
