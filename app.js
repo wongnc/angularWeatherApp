@@ -54,12 +54,24 @@ weatherApp.controller('homeController', ['$scope', 'cityService', function($scop
     
     $scope.days = $routeParams.days || 2;
     
-    $http.get("http://api.openweathermap.org/data/2.5/weather?id=5391997&APPID=370a271ac522911d56217344a090d0b2").then(function(res){
+ /*   $http.get("http://api.openweathermap.org/data/2.5/weather?id=5391997&APPID=370a271ac522911d56217344a090d0b2").then(function(res){
          console.log(res);
-	});
+		 $scope.city = res.data.name;
+	});*/
+	 
+    $scope.weatherAPI = $http.get("http://api.openweathermap.org/data/2.5/weather?id=5391997&APPID=370a271ac522911d56217344a090d0b2").
+        then(function(weatherResult){
+            $scope.city = weatherResult.data.name;
+		    $scope.dt = weatherResult.data.dt;
+		    $scope.temp = weatherResult.data.main.temp;
+			console.log($scope.city);
+		    console.log($scope.dt);
+		    console.log($scope.temp);
+        });	 
+	 
 	
-	$scope.weatherResult = $scope.weatherAPI.get({ q: $scope.city, cnt:$scope.days });
 	
+	 
 	$scope.convertToFahrenheit = function(degK){
 		
 		return Math.round((1.8 * (degK - 273)) + 32);
