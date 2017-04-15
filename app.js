@@ -1,5 +1,5 @@
 //Module
-var weatherApp = angular.module('weatherApp', ['ngRoute', 'ngResource']);
+var weatherApp = angular.module('weatherApp', ['ngRoute']);
 
 //Routes
 weatherApp.config(function ($routeProvider){
@@ -37,7 +37,7 @@ weatherApp.service('cityService', function() {
 
 //Controllers
 
-weatherApp.controller('homeController', ['$scope', 'cityService', function($scope, cityService){
+weatherApp.controller('homeController', ['$scope', 'cityService','$http', function($scope, cityService, $http){
 	
 	$scope.city = cityService.city;
 	
@@ -45,10 +45,20 @@ weatherApp.controller('homeController', ['$scope', 'cityService', function($scop
 	$scope.$watch('city', function(){
 		cityService.city = $scope.city;
 	}, true)
+
+	$http.get("http://api.openweathermap.org/data/2.5/weather?id=5391997&APPID=370a271ac522911d56217344a090d0b2").
+        then(function(weatherResult){
+            $scope.city = weatherResult.data.name;
+		    $scope.dt = weatherResult.data.dt;
+		    $scope.temp = weatherResult.data.main.temp;
+			console.log($scope.city);
+		    console.log($scope.dt);
+		    console.log($scope.temp);
+        });	
 	
 }]);
 
- weatherApp.controller('forecastController', ['$scope', '$resource', '$routeParams', 'cityService', '$http', function($scope, $resource, $routeParams, cityService,$http){
+ weatherApp.controller('forecastController', ['$scope', '$routeParams', 'cityService', '$http', function($scope, $routeParams, cityService,$http){
     
     $scope.city = cityService.city;
     
