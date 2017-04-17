@@ -61,6 +61,7 @@ weatherApp.controller('homeController', ['$scope', 'cityService', function($scop
 	 
     $scope.weatherAPI = $http.get("http://api.openweathermap.org/data/2.5/weather?id=5391997&APPID=370a271ac522911d56217344a090d0b2").
         then(function(weatherResult){
+			$scope.weatherResult = weatherResult;
             $scope.city = weatherResult.data.name;
 		    $scope.dt = weatherResult.data.dt;
 		    $scope.temp = weatherResult.data.main.temp;
