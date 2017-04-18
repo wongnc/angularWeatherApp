@@ -25,6 +25,13 @@ weatherApp.config(function ($routeProvider){
 	})
 });
 
+weatherApp.config(['$sceDelegateProvider', function($sceDelegateProvider) {
+    $sceDelegateProvider.resourceUrlWhitelist([
+        'self',
+        'http://api.openweathermap.org/**'
+    ])
+}]);
+
 weatherApp.config(['$locationProvider', function($locationProvider) {
   $locationProvider.hashPrefix('');
 }]);
@@ -48,36 +55,22 @@ weatherApp.controller('homeController', ['$scope', 'cityService', function($scop
 	
 }]);
 
- weatherApp.controller('forecastController', ['$scope', '$resource', '$routeParams', 'cityService', '$http', function($scope, $resource, $routeParams, cityService,$http){
+ weatherApp.controller('forecastController', ['$scope', '$resource', '$routeParams', 'cityService', '$http', function($scope, $resource, $routeParams, cityService, $http){
     
     $scope.city = cityService.city;
     
     $scope.days = $routeParams.days || 2;
-    
- /*   $http.get("http://api.openweathermap.org/data/2.5/weather?id=5391997&APPID=370a271ac522911d56217344a090d0b2").then(function(res){
-         console.log(res);
-		 $scope.city = res.data.name;
-	});*/
 	 
-    $scope.weatherAPI = $http.get("http://api.openweathermap.org/data/2.5/weather?id=5391997&APPID=370a271ac522911d56217344a090d0b2").
-        then(function(weatherResult){
-			$scope.weatherResult = weatherResult;
-            $scope.city = weatherResult.data.name;
-		    $scope.dt = weatherResult.data.dt;
-		    $scope.temp = weatherResult.data.main.temp;
-			console.log($scope.city);
-		    console.log($scope.dt);
-		    console.log($scope.temp);
-        });	 
+	 $scope.weatherAPI = $resource("http://api.openweathermap.org/data/2.5/forecast/daily?APPID=370a271ac522911d56217344a090d0b2");
 	 
-	
-	
+	 $scope.weatherResult = $scope.weatherAPI.get({q: $scope.city, cnt:$scope.days});
 	 
-	$scope.convertToFahrenheit = function(degK){
+	 //convert degrees to fahrenheit
+	 $scope.convertToFahrenheit = function(degK){
 		
 		return Math.round((1.8 * (degK - 273)) + 32);
 	}
-	
+	//convert date to readable format
 	$scope.convertToDate = function(dt){
 		
 		return new Date(dt*1000);
