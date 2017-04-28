@@ -1,0 +1,27 @@
+body {
+	background: url("../pics/rain.jpg") no-repeat center center fixed;
+	background-size: cover;
+}
+
+h4{
+	color:white;
+}
+
+h1{
+	color:orangered;
+}
+
+#back{
+	color:darkturquoise;
+}
+
+#forecastTitle{
+	text-align:center;
+	color:orangered;
+	font-size: 40px;
+}
+
+#days{
+	color:white;
+}
+
